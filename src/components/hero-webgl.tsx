@@ -1,14 +1,41 @@
-import { Canvas, useFrame } from "@react-three/fiber"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { useRef, useState, useEffect, useMemo } from "react"
 import * as THREE from "three"
 
 const NetworkSphere = () => {
   const groupRef = useRef<THREE.Group>(null)
   const wireRef = useRef<THREE.Mesh>(null)
-  const pointsRef = useRef<THREE.Points>(null)
   const ringsRef = useRef<THREE.Group>(null)
+  const pulseRef = useRef<THREE.Points>(null)
 
-  // Animated nodes on sphere surface
+  // Smooth mouse tracking
+  const mouse = useRef({ x: 0, y: 0 })
+  const smoothMouse = useRef({ x: 0, y: 0 })
+
+  const { gl } = useThree()
+
+  useEffect(() => {
+    const canvas = gl.domElement.parentElement || window
+    const onMove = (e: Event) => {
+      const ev = e as MouseEvent
+      mouse.current.x = (ev.clientX / window.innerWidth - 0.5) * 2
+      mouse.current.y = -(ev.clientY / window.innerHeight - 0.5) * 2
+    }
+    const onTouch = (e: Event) => {
+      const ev = e as TouchEvent
+      if (ev.touches.length > 0) {
+        mouse.current.x = (ev.touches[0].clientX / window.innerWidth - 0.5) * 2
+        mouse.current.y = -(ev.touches[0].clientY / window.innerHeight - 0.5) * 2
+      }
+    }
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("touchmove", onTouch)
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("touchmove", onTouch)
+    }
+  }, [gl])
+
   const nodesGeometry = useMemo(() => {
     const count = 180
     const positions = new Float32Array(count * 3)
@@ -28,7 +55,6 @@ const NetworkSphere = () => {
     return geo
   }, [])
 
-  // Connection lines between random node pairs
   const linesGeometry = useMemo(() => {
     const positions: number[] = []
     const nodePositions = nodesGeometry.attributes.position.array as Float32Array
@@ -46,8 +72,6 @@ const NetworkSphere = () => {
     return geo
   }, [nodesGeometry])
 
-  // Data pulse particles orbiting the sphere
-  const pulseRef = useRef<THREE.Points>(null)
   const pulseGeo = useMemo(() => {
     const count = 40
     const positions = new Float32Array(count * 3)
@@ -59,25 +83,35 @@ const NetworkSphere = () => {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
 
+    // Smooth lerp mouse
+    smoothMouse.current.x += (mouse.current.x - smoothMouse.current.x) * 0.05
+    smoothMouse.current.y += (mouse.current.y - smoothMouse.current.y) * 0.05
+
     if (groupRef.current) {
-      groupRef.current.rotation.y = t * 0.18
-      groupRef.current.rotation.x = Math.sin(t * 0.07) * 0.15
-    }
-    if (wireRef.current) {
-      const s = 1 + Math.sin(t * 0.6) * 0.015
-      wireRef.current.scale.setScalar(s)
-    }
-    if (ringsRef.current) {
-      ringsRef.current.rotation.z = t * 0.25
-      ringsRef.current.rotation.x = t * 0.12
+      // Base auto-rotation + mouse tilt
+      groupRef.current.rotation.y = t * 0.18 + smoothMouse.current.x * 0.55
+      groupRef.current.rotation.x = Math.sin(t * 0.07) * 0.15 + smoothMouse.current.y * 0.35
     }
 
-    // Animate pulse particles along orbit
+    if (wireRef.current) {
+      // Pulse scale slightly on mouse movement
+      const activity = Math.abs(mouse.current.x) + Math.abs(mouse.current.y)
+      const s = 1 + Math.sin(t * 0.6) * 0.015 + activity * 0.012
+      wireRef.current.scale.setScalar(s)
+    }
+
+    if (ringsRef.current) {
+      ringsRef.current.rotation.z = t * 0.25 - smoothMouse.current.x * 0.2
+      ringsRef.current.rotation.x = t * 0.12 + smoothMouse.current.y * 0.2
+    }
+
     if (pulseRef.current) {
       const pos = pulseRef.current.geometry.attributes.position.array as Float32Array
       const count = pos.length / 3
+      // Speed up orbits on mouse activity
+      const speed = 0.5 + (Math.abs(smoothMouse.current.x) + Math.abs(smoothMouse.current.y)) * 0.4
       for (let i = 0; i < count; i++) {
-        const angle = t * 0.5 + (i / count) * Math.PI * 2
+        const angle = t * speed + (i / count) * Math.PI * 2
         const orbit = 1.9 + Math.sin(i * 1.3) * 0.3
         const tilt = (i / count) * Math.PI
         pos[i * 3] = orbit * Math.cos(angle) * Math.sin(tilt)
@@ -90,40 +124,26 @@ const NetworkSphere = () => {
 
   return (
     <group ref={groupRef}>
-      {/* Core wireframe sphere */}
       <mesh ref={wireRef}>
         <icosahedronGeometry args={[1.5, 4]} />
-        <meshBasicMaterial
-          color="#AAFF00"
-          wireframe
-          transparent
-          opacity={0.13}
-        />
+        <meshBasicMaterial color="#AAFF00" wireframe transparent opacity={0.13} />
       </mesh>
 
-      {/* Inner solid sphere glow */}
       <mesh>
         <sphereGeometry args={[1.35, 32, 32]} />
-        <meshBasicMaterial
-          color="#0a1a00"
-          transparent
-          opacity={0.55}
-        />
+        <meshBasicMaterial color="#0a1a00" transparent opacity={0.55} />
       </mesh>
 
-      {/* Outer halo ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.72, 0.008, 8, 120]} />
         <meshBasicMaterial color="#AAFF00" transparent opacity={0.35} />
       </mesh>
 
-      {/* Tilted ring */}
       <mesh rotation={[Math.PI / 3, 0.4, 0]}>
         <torusGeometry args={[1.72, 0.005, 8, 120]} />
         <meshBasicMaterial color="#AAFF00" transparent opacity={0.2} />
       </mesh>
 
-      {/* Animated inner rings group */}
       <group ref={ringsRef}>
         <mesh rotation={[0, 0, 0]}>
           <torusGeometry args={[1.3, 0.004, 8, 80]} />
@@ -135,17 +155,14 @@ const NetworkSphere = () => {
         </mesh>
       </group>
 
-      {/* Node dots on sphere */}
-      <points ref={pointsRef} geometry={nodesGeometry}>
+      <points geometry={nodesGeometry}>
         <pointsMaterial color="#AAFF00" size={0.04} transparent opacity={0.9} sizeAttenuation />
       </points>
 
-      {/* Connection lines */}
       <lineSegments geometry={linesGeometry}>
         <lineBasicMaterial color="#AAFF00" transparent opacity={0.12} />
       </lineSegments>
 
-      {/* Orbiting pulse particles */}
       <points ref={pulseRef} geometry={pulseGeo}>
         <pointsMaterial color="#ccff44" size={0.055} transparent opacity={0.95} sizeAttenuation />
       </points>
@@ -153,9 +170,19 @@ const NetworkSphere = () => {
   )
 }
 
-// Floating background particles
 const BackgroundParticles = () => {
   const ref = useRef<THREE.Points>(null)
+  const mouse = useRef({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2
+      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
+    }
+    window.addEventListener("mousemove", onMove)
+    return () => window.removeEventListener("mousemove", onMove)
+  }, [])
+
   const geo = useMemo(() => {
     const count = 300
     const pos = new Float32Array(count * 3)
@@ -171,7 +198,8 @@ const BackgroundParticles = () => {
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.rotation.y = clock.getElapsedTime() * 0.02
+      ref.current.rotation.y = clock.getElapsedTime() * 0.02 + mouse.current.x * 0.04
+      ref.current.rotation.x = mouse.current.y * 0.03
     }
   })
 
