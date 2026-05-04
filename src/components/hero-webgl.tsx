@@ -211,80 +211,53 @@ const BackgroundParticles = () => {
 }
 
 export const Hero3DWebGL = () => {
-  const titleWords = "Custom Solutions".split(" ")
-  const subtitle = "Инфраструктурные проекты под ключ. Дата-центры. Суперкомпьютеры."
-  const [visibleWords, setVisibleWords] = useState(0)
+  const [titleVisible, setTitleVisible] = useState(false)
   const [subtitleVisible, setSubtitleVisible] = useState(false)
-  const [delays, setDelays] = useState<number[]>([])
-  const [subtitleDelay, setSubtitleDelay] = useState(0)
 
   useEffect(() => {
-    setDelays(titleWords.map(() => Math.random() * 0.07))
-    setSubtitleDelay(Math.random() * 0.1)
-  }, [titleWords.length])
-
-  useEffect(() => {
-    if (visibleWords < titleWords.length) {
-      const timeout = setTimeout(() => setVisibleWords(visibleWords + 1), 600)
-      return () => clearTimeout(timeout)
-    } else {
-      const timeout = setTimeout(() => setSubtitleVisible(true), 800)
-      return () => clearTimeout(timeout)
-    }
-  }, [visibleWords, titleWords.length])
+    const t1 = setTimeout(() => setTitleVisible(true), 300)
+    const t2 = setTimeout(() => setSubtitleVisible(true), 900)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
 
   return (
     <div className="h-screen bg-black relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none z-10">
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-black to-transparent" />
         <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-black to-transparent" />
       </div>
 
-      <div className="h-screen w-full absolute z-[60] pointer-events-none px-10 flex justify-center flex-col items-center">
-        <div
-          className="flex flex-col items-start leading-none"
-          style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 900 }}
-        >
-          {/* custom — lime */}
-          <div
-            className={`text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl uppercase ${0 < visibleWords ? "fade-in" : ""}`}
-            style={{
-              color: "#AAFF00",
-              animationDelay: `${delays[0] || 0}s`,
-              opacity: 0 < visibleWords ? undefined : 0,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            custom
-          </div>
-          {/* solutions — white */}
-          <div
-            className={`text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl uppercase ${1 < visibleWords ? "fade-in" : ""}`}
-            style={{
-              color: "#ffffff",
-              animationDelay: `${0.13 + (delays[1] || 0)}s`,
-              opacity: 1 < visibleWords ? undefined : 0,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            solutions
-          </div>
-        </div>
+      {/* Подпись сверху справа — как на картинке */}
+      <div
+        className={`absolute top-24 right-10 z-[60] pointer-events-none text-right ${subtitleVisible ? "fade-in-subtitle" : ""}`}
+        style={{ opacity: subtitleVisible ? undefined : 0 }}
+      >
+        <p className="text-white/50 text-xs md:text-sm tracking-widest uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+          ©IT-ТЕХНОЛОГИИ
+        </p>
+        <p className="text-white/50 text-xs md:text-sm tracking-widest uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+          С ИНДИВИДУАЛЬНЫМ ПОДХОДОМ
+        </p>
+      </div>
 
-        <div className="text-xs md:text-lg xl:text-xl mt-6 overflow-hidden text-white/70 max-w-2xl text-center px-4"
-          style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400 }}
+      {/* Главный заголовок — внизу по центру, одна строка, строчные */}
+      <div className="h-screen w-full absolute z-[60] pointer-events-none flex items-end justify-center pb-10 px-4">
+        <div
+          className={titleVisible ? "fade-in" : ""}
+          style={{
+            fontFamily: "'Unbounded', sans-serif",
+            fontWeight: 900,
+            fontSize: "clamp(2.5rem, 9vw, 9rem)",
+            color: "#AAFF00",
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+            opacity: titleVisible ? undefined : 0,
+            whiteSpace: "nowrap",
+          }}
         >
-          <div
-            className={subtitleVisible ? "fade-in-subtitle" : ""}
-            style={{
-              animationDelay: `${titleWords.length * 0.13 + 0.2 + subtitleDelay}s`,
-              opacity: subtitleVisible ? undefined : 0,
-            }}
-          >
-            {subtitle}
-          </div>
+          custom solutions
         </div>
       </div>
 

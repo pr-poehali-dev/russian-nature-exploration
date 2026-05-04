@@ -11,9 +11,10 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="font-orbitron text-xl font-bold text-white">
-              Custom<span className="text-[#AAFF00]"> Solutions</span>
-            </h1>
+            <span style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 900, letterSpacing: "-0.03em", fontSize: "1.1rem" }}>
+              <span className="text-[#AAFF00]">custom</span>
+              <span className="text-white"> solutions</span>
+            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -25,9 +26,7 @@ export function Navbar() {
               >
                 Направления
               </a>
-              <a href="#faq" className="font-geist text-white hover:text-[#AAFF00] transition-colors duration-200">
-                Вопросы
-              </a>
+
             </div>
           </div>
 
@@ -58,13 +57,7 @@ export function Navbar() {
               >
                 Направления
               </a>
-              <a
-                href="#faq"
-                className="block px-3 py-2 font-geist text-white hover:text-[#AAFF00] transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                Вопросы
-              </a>
+
               <div className="px-3 py-2">
                 <Button className="w-full bg-[#AAFF00] hover:bg-[#99ee00] text-black font-geist font-bold border-0">
                   Связаться

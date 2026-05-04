@@ -7,9 +7,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <h2 className="font-orbitron text-2xl font-bold text-white mb-4">
-              Custom<span className="text-[#AAFF00]"> Solutions</span>
-            </h2>
+            <div className="mb-4" style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 900, letterSpacing: "-0.03em", fontSize: "1.5rem", lineHeight: 1 }}>
+              <span className="text-[#AAFF00]">custom</span>
+              <span className="text-white"> solutions</span>
+            </div>
             <p className="font-space-mono text-gray-300 mb-6 max-w-md">
               Реализуем крупные инфраструктурные проекты под ключ. Дата-центры, суперкомпьютеры, комплексная интеграция.
               Более 15 лет экспертизы — качество, сроки и результат гарантированы.
