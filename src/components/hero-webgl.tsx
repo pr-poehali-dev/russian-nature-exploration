@@ -242,24 +242,40 @@ export const Hero3DWebGL = () => {
         <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-black to-transparent" />
       </div>
 
-      <div className="h-screen uppercase items-center w-full absolute z-[60] pointer-events-none px-10 flex justify-center flex-col">
-        <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold font-orbitron">
-          <div className="flex space-x-2 lg:space-x-6 overflow-hidden text-white">
-            {titleWords.map((word, index) => (
-              <div
-                key={index}
-                className={index < visibleWords ? "fade-in" : ""}
-                style={{
-                  animationDelay: `${index * 0.13 + (delays[index] || 0)}s`,
-                  opacity: index < visibleWords ? undefined : 0,
-                }}
-              >
-                {word}
-              </div>
-            ))}
+      <div className="h-screen w-full absolute z-[60] pointer-events-none px-10 flex justify-center flex-col items-center">
+        <div
+          className="flex flex-col items-start leading-none"
+          style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 900 }}
+        >
+          {/* custom — lime */}
+          <div
+            className={`text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl uppercase ${0 < visibleWords ? "fade-in" : ""}`}
+            style={{
+              color: "#AAFF00",
+              animationDelay: `${delays[0] || 0}s`,
+              opacity: 0 < visibleWords ? undefined : 0,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            custom
+          </div>
+          {/* solutions — white */}
+          <div
+            className={`text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl uppercase ${1 < visibleWords ? "fade-in" : ""}`}
+            style={{
+              color: "#ffffff",
+              animationDelay: `${0.13 + (delays[1] || 0)}s`,
+              opacity: 1 < visibleWords ? undefined : 0,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            solutions
           </div>
         </div>
-        <div className="text-xs md:text-xl xl:text-2xl 2xl:text-3xl mt-2 overflow-hidden text-white font-bold max-w-4xl mx-auto text-center px-4">
+
+        <div className="text-xs md:text-lg xl:text-xl mt-6 overflow-hidden text-white/70 max-w-2xl text-center px-4"
+          style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400 }}
+        >
           <div
             className={subtitleVisible ? "fade-in-subtitle" : ""}
             style={{
