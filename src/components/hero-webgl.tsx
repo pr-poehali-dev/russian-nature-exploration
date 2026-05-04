@@ -1,115 +1,184 @@
-import { Canvas, extend, useFrame } from "@react-three/fiber"
-import { useAspect, useTexture } from "@react-three/drei"
-import { useMemo, useRef, useState, useEffect } from "react"
+import { Canvas, useFrame } from "@react-three/fiber"
+import { useRef, useState, useEffect, useMemo } from "react"
 import * as THREE from "three"
 
-const TEXTUREMAP = { src: "https://i.postimg.cc/XYwvXN8D/img-4.png" }
-const DEPTHMAP = { src: "https://i.postimg.cc/2SHKQh2q/raw-4.webp" }
+const NetworkSphere = () => {
+  const groupRef = useRef<THREE.Group>(null)
+  const wireRef = useRef<THREE.Mesh>(null)
+  const pointsRef = useRef<THREE.Points>(null)
+  const ringsRef = useRef<THREE.Group>(null)
 
-extend(THREE as unknown as Record<string, unknown>)
+  // Animated nodes on sphere surface
+  const nodesGeometry = useMemo(() => {
+    const count = 180
+    const positions = new Float32Array(count * 3)
+    const sizes = new Float32Array(count)
+    for (let i = 0; i < count; i++) {
+      const phi = Math.acos(-1 + (2 * i) / count)
+      const theta = Math.sqrt(count * Math.PI) * phi
+      const r = 1.52
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+      positions[i * 3 + 2] = r * Math.cos(phi)
+      sizes[i] = Math.random() * 3 + 1.5
+    }
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1))
+    return geo
+  }, [])
 
-const WIDTH = 300
-const HEIGHT = 300
+  // Connection lines between random node pairs
+  const linesGeometry = useMemo(() => {
+    const positions: number[] = []
+    const nodePositions = nodesGeometry.attributes.position.array as Float32Array
+    const count = nodePositions.length / 3
+    for (let i = 0; i < 60; i++) {
+      const a = Math.floor(Math.random() * count)
+      const b = Math.floor(Math.random() * count)
+      positions.push(
+        nodePositions[a * 3], nodePositions[a * 3 + 1], nodePositions[a * 3 + 2],
+        nodePositions[b * 3], nodePositions[b * 3 + 1], nodePositions[b * 3 + 2],
+      )
+    }
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(positions), 3))
+    return geo
+  }, [nodesGeometry])
 
-const Scene = () => {
-  const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src])
-  const meshRef = useRef<THREE.Mesh>(null)
+  // Data pulse particles orbiting the sphere
+  const pulseRef = useRef<THREE.Points>(null)
+  const pulseGeo = useMemo(() => {
+    const count = 40
+    const positions = new Float32Array(count * 3)
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+    return geo
+  }, [])
 
-  const material = useMemo(() => {
-    const vertexShader = `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+
+    if (groupRef.current) {
+      groupRef.current.rotation.y = t * 0.18
+      groupRef.current.rotation.x = Math.sin(t * 0.07) * 0.15
+    }
+    if (wireRef.current) {
+      const s = 1 + Math.sin(t * 0.6) * 0.015
+      wireRef.current.scale.setScalar(s)
+    }
+    if (ringsRef.current) {
+      ringsRef.current.rotation.z = t * 0.25
+      ringsRef.current.rotation.x = t * 0.12
+    }
+
+    // Animate pulse particles along orbit
+    if (pulseRef.current) {
+      const pos = pulseRef.current.geometry.attributes.position.array as Float32Array
+      const count = pos.length / 3
+      for (let i = 0; i < count; i++) {
+        const angle = t * 0.5 + (i / count) * Math.PI * 2
+        const orbit = 1.9 + Math.sin(i * 1.3) * 0.3
+        const tilt = (i / count) * Math.PI
+        pos[i * 3] = orbit * Math.cos(angle) * Math.sin(tilt)
+        pos[i * 3 + 1] = orbit * Math.sin(angle * 0.7 + i) * 0.4
+        pos[i * 3 + 2] = orbit * Math.sin(angle) * Math.cos(tilt * 0.5)
       }
-    `
-
-    const fragmentShader = `
-      uniform sampler2D uTexture;
-      uniform sampler2D uDepthMap;
-      uniform vec2 uPointer;
-      uniform float uProgress;
-      uniform float uTime;
-      varying vec2 vUv;
-
-      // Simple noise function
-      float random(vec2 st) {
-        return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-      }
-
-      float noise(vec2 st) {
-        vec2 i = floor(st);
-        vec2 f = fract(st);
-        float a = random(i);
-        float b = random(i + vec2(1.0, 0.0));
-        float c = random(i + vec2(0.0, 1.0));
-        float d = random(i + vec2(1.0, 1.0));
-        vec2 u = f * f * (3.0 - 2.0 * f);
-        return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-      }
-
-      void main() {
-        vec2 uv = vUv;
-
-        // Depth-based displacement
-        float depth = texture2D(uDepthMap, uv).r;
-        vec2 displacement = depth * uPointer * 0.01;
-        vec2 distortedUv = uv + displacement;
-
-        // Base texture
-        vec4 baseColor = texture2D(uTexture, distortedUv);
-
-        // Create scanning effect
-        float aspect = ${WIDTH}.0 / ${HEIGHT}.0;
-        vec2 tUv = vec2(uv.x * aspect, uv.y);
-        vec2 tiling = vec2(120.0);
-        vec2 tiledUv = mod(tUv * tiling, 2.0) - 1.0;
-
-        float brightness = noise(tUv * tiling * 0.5);
-        float dist = length(tiledUv);
-        float dot = smoothstep(0.5, 0.49, dist) * brightness;
-
-        // Flow effect based on progress
-        float flow = 1.0 - smoothstep(0.0, 0.02, abs(depth - uProgress));
-
-        // Lime scanning overlay
-        vec3 mask = vec3(dot * flow * 4.0, dot * flow * 10.0, 0.0);
-
-        // Combine effects
-        vec3 final = baseColor.rgb + mask;
-
-        gl_FragColor = vec4(final, 1.0);
-      }
-    `
-
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTexture: { value: rawMap },
-        uDepthMap: { value: depthMap },
-        uPointer: { value: new THREE.Vector2(0, 0) },
-        uProgress: { value: 0 },
-        uTime: { value: 0 },
-      },
-      vertexShader,
-      fragmentShader,
-    })
-  }, [rawMap, depthMap])
-
-  const [w, h] = useAspect(WIDTH, HEIGHT)
-
-  useFrame(({ clock, pointer }) => {
-    if (material.uniforms) {
-      material.uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5
-      material.uniforms.uPointer.value = pointer
-      material.uniforms.uTime.value = clock.getElapsedTime()
+      pulseRef.current.geometry.attributes.position.needsUpdate = true
     }
   })
 
-  const scaleFactor = 0.3
   return (
-    <mesh ref={meshRef} scale={[w * scaleFactor, h * scaleFactor, 1]} material={material}>
-      <planeGeometry />
-    </mesh>
+    <group ref={groupRef}>
+      {/* Core wireframe sphere */}
+      <mesh ref={wireRef}>
+        <icosahedronGeometry args={[1.5, 4]} />
+        <meshBasicMaterial
+          color="#AAFF00"
+          wireframe
+          transparent
+          opacity={0.13}
+        />
+      </mesh>
+
+      {/* Inner solid sphere glow */}
+      <mesh>
+        <sphereGeometry args={[1.35, 32, 32]} />
+        <meshBasicMaterial
+          color="#0a1a00"
+          transparent
+          opacity={0.55}
+        />
+      </mesh>
+
+      {/* Outer halo ring */}
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[1.72, 0.008, 8, 120]} />
+        <meshBasicMaterial color="#AAFF00" transparent opacity={0.35} />
+      </mesh>
+
+      {/* Tilted ring */}
+      <mesh rotation={[Math.PI / 3, 0.4, 0]}>
+        <torusGeometry args={[1.72, 0.005, 8, 120]} />
+        <meshBasicMaterial color="#AAFF00" transparent opacity={0.2} />
+      </mesh>
+
+      {/* Animated inner rings group */}
+      <group ref={ringsRef}>
+        <mesh rotation={[0, 0, 0]}>
+          <torusGeometry args={[1.3, 0.004, 8, 80]} />
+          <meshBasicMaterial color="#AAFF00" transparent opacity={0.3} />
+        </mesh>
+        <mesh rotation={[Math.PI / 2.5, 0, 0]}>
+          <torusGeometry args={[1.1, 0.003, 8, 80]} />
+          <meshBasicMaterial color="#88cc00" transparent opacity={0.2} />
+        </mesh>
+      </group>
+
+      {/* Node dots on sphere */}
+      <points ref={pointsRef} geometry={nodesGeometry}>
+        <pointsMaterial color="#AAFF00" size={0.04} transparent opacity={0.9} sizeAttenuation />
+      </points>
+
+      {/* Connection lines */}
+      <lineSegments geometry={linesGeometry}>
+        <lineBasicMaterial color="#AAFF00" transparent opacity={0.12} />
+      </lineSegments>
+
+      {/* Orbiting pulse particles */}
+      <points ref={pulseRef} geometry={pulseGeo}>
+        <pointsMaterial color="#ccff44" size={0.055} transparent opacity={0.95} sizeAttenuation />
+      </points>
+    </group>
+  )
+}
+
+// Floating background particles
+const BackgroundParticles = () => {
+  const ref = useRef<THREE.Points>(null)
+  const geo = useMemo(() => {
+    const count = 300
+    const pos = new Float32Array(count * 3)
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 12
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 12
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 8
+    }
+    const g = new THREE.BufferGeometry()
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3))
+    return g
+  }, [])
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.rotation.y = clock.getElapsedTime() * 0.02
+    }
+  })
+
+  return (
+    <points ref={ref} geometry={geo}>
+      <pointsMaterial color="#AAFF00" size={0.018} transparent opacity={0.25} sizeAttenuation />
+    </points>
   )
 }
 
@@ -177,15 +246,12 @@ export const Hero3DWebGL = () => {
 
       <Canvas
         flat
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: "high-performance",
-        }}
-        camera={{ position: [0, 0, 1] }}
+        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+        camera={{ position: [0, 0, 4.5], fov: 50 }}
         style={{ background: "#000000" }}
       >
-        <Scene />
+        <BackgroundParticles />
+        <NetworkSphere />
       </Canvas>
     </div>
   )
