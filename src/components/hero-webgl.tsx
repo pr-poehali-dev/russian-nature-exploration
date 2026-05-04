@@ -72,8 +72,8 @@ const Scene = () => {
         // Flow effect based on progress
         float flow = 1.0 - smoothstep(0.0, 0.02, abs(depth - uProgress));
 
-        // Red scanning overlay
-        vec3 mask = vec3(dot * flow * 10.0, 0.0, 0.0);
+        // Lime scanning overlay
+        vec3 mask = vec3(dot * flow * 4.0, dot * flow * 10.0, 0.0);
 
         // Combine effects
         vec3 final = baseColor.rgb + mask;

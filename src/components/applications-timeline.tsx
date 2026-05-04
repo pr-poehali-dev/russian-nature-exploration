@@ -11,16 +11,16 @@ export function ApplicationsTimeline() {
             до монтажа инженерных систем и ввода в эксплуатацию.
           </p>
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Проектирование и инженерное обеспечение
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Поставка и монтаж серверного оборудования
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Системы охлаждения, электропитания и безопасности
             </div>
           </div>
@@ -36,16 +36,16 @@ export function ApplicationsTimeline() {
             до сборки, тестирования и запуска в промышленную эксплуатацию.
           </p>
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Архитектура и проектирование вычислительных кластеров
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Поставка высокопроизводительных компонентов
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Интеграция и нагрузочное тестирование
             </div>
           </div>
@@ -61,16 +61,16 @@ export function ApplicationsTimeline() {
             и монтажа в единый слаженный процесс с фиксированными сроками и результатом.
           </p>
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Управление цепочкой поставок и логистикой
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Монтаж и пусконаладочные работы
             </div>
-            <div className="flex items-center gap-3 text-red-400 text-sm">
-              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="flex items-center gap-3 text-lime-400 text-sm">
+              <div className="w-2 h-2 bg-[#AAFF00] rounded-full"></div>
               Сопровождение и техническая поддержка
             </div>
           </div>
