@@ -3,75 +3,75 @@ import { Timeline } from "@/components/ui/timeline"
 export function ApplicationsTimeline() {
   const data = [
     {
-      title: "Медицинское восстановление",
+      title: "Дата-центры",
       content: (
         <div>
           <p className="text-white text-sm md:text-base font-normal mb-6 leading-relaxed">
-            Революционное лечение паралича, травм спинного мозга и нейродегенеративных заболеваний. Восстановление
-            моторных функций и независимости миллионам людей по всему миру.
+            Полный цикл проектирования и строительства дата-центров любой мощности. От концепции и выбора оборудования
+            до монтажа инженерных систем и ввода в эксплуатацию.
           </p>
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Восстановление при тетра- и параплегии
+              Проектирование и инженерное обеспечение
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Контроль симптомов БАС и Паркинсона
+              Поставка и монтаж серверного оборудования
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Ускорение реабилитации после инсульта
+              Системы охлаждения, электропитания и безопасности
             </div>
           </div>
         </div>
       ),
     },
     {
-      title: "Когнитивное усиление",
+      title: "Суперкомпьютеры",
       content: (
         <div>
           <p className="text-white text-sm md:text-base font-normal mb-6 leading-relaxed">
-            Усиление человеческого интеллекта, памяти и способности к обучению. Прямые нейроинтерфейсы для
-            улучшенной когнитивной производительности и обработки информации.
+            Опыт реализации проектов суперкомпьютерных систем — от подбора архитектуры и поставки компонентов
+            до сборки, тестирования и запуска в промышленную эксплуатацию.
           </p>
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Улучшение памяти и оптимизация запоминания
+              Архитектура и проектирование вычислительных кластеров
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Ускоренное обучение и освоение навыков
+              Поставка высокопроизводительных компонентов
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Перевод языков в реальном времени
+              Интеграция и нагрузочное тестирование
             </div>
           </div>
         </div>
       ),
     },
     {
-      title: "Цифровая интеграция",
+      title: "Комплексная интеграция",
       content: (
         <div>
           <p className="text-white text-sm md:text-base font-normal mb-6 leading-relaxed">
-            Бесшовное соединение человеческого сознания с цифровыми системами. Управление устройствами,
-            доступ к информации и общение силой мысли.
+            Реализация уникальных клиентоориентированных проектов полного цикла. Координация поставок, логистики
+            и монтажа в единый слаженный процесс с фиксированными сроками и результатом.
           </p>
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Управление устройствами силой мысли
+              Управление цепочкой поставок и логистикой
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Прямой доступ к интернету и облаку
+              Монтаж и пусконаладочные работы
             </div>
             <div className="flex items-center gap-3 text-red-400 text-sm">
               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-              Телепатические сети связи
+              Сопровождение и техническая поддержка
             </div>
           </div>
         </div>
@@ -83,10 +83,10 @@ export function ApplicationsTimeline() {
     <section id="applications" className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-10">
         <div className="text-center mb-16">
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6">Трансформирующие применения</h2>
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6">Направления работы</h2>
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Технологии SynapseAI открывают беспрецедентные возможности для усиления человека, медицинского
-            лечения и цифровой интеграции в множестве областей.
+            «Кастом Солюшнз» реализует крупные инфраструктурные проекты с опытом более 15 лет —
+            от концепции до ввода в эксплуатацию.
           </p>
         </div>
 

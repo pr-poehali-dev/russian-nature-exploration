@@ -3,25 +3,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const testimonials = [
   {
-    name: "Елена Родригес",
-    role: "Директор по нейронауке, Quantum Dynamics",
-    avatar: "/professional-woman-scientist.png",
-    content:
-      "SynapseAI изменил наш подход к нейрореабилитации. Результаты пациентов улучшились на 340% после внедрения.",
-  },
-  {
-    name: "Маркус Уильямс",
-    role: "Руководитель исследований, Stellar Analytics",
+    name: "Алексей Громов",
+    role: "Технический директор, крупный промышленный холдинг",
     avatar: "/cybersecurity-expert-man.jpg",
     content:
-      "Точность и протоколы безопасности не имеют аналогов. Мы значительно ускорили клинические испытания с платформой SynapseAI.",
+      "С «Кастом Солюшнз» мы запустили дата-центр в срок, несмотря на серьёзные логистические сложности. Команда нашла альтернативные каналы поставки и не сдвинула дедлайн ни на день.",
   },
   {
-    name: "Анна Ковальски",
-    role: "Вице-президент по разработке, Nova Industries",
+    name: "Марина Соколова",
+    role: "Директор по ИТ-инфраструктуре, финансовая группа",
+    avatar: "/professional-woman-scientist.png",
+    content:
+      "За три года совместной работы — ни одного срыва сроков, ни одной претензии. Качество поставляемого оборудования и монтажных работ неизменно на высшем уровне.",
+  },
+  {
+    name: "Дмитрий Вершинин",
+    role: "Руководитель проекта, исследовательский центр",
     avatar: "/asian-woman-tech-developer.jpg",
     content:
-      "Интеграция прошла безупречно. Адаптивные алгоритмы понимают намерения пользователя лучше любой системы, что мы тестировали.",
+      "Команда глубоко погрузилась в наши требования и предложила решение, которое мы сами не рассматривали. Суперкомпьютерный кластер запущен и работает стабильно уже второй год.",
   },
 ]
 
@@ -30,9 +30,9 @@ export function TestimonialsSection() {
     <section className="py-24 px-6 bg-card">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-card-foreground mb-4 font-sans">Нам доверяют лидеры</h2>
+          <h2 className="text-4xl font-bold text-card-foreground mb-4 font-sans">Нам доверяют</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Что говорят лидеры индустрии о нашей революционной технологии
+            Что говорят партнёры и заказчики о работе с «Кастом Солюшнз»
           </p>
         </div>
 
