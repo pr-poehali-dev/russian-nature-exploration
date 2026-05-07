@@ -56,8 +56,7 @@ export function Footer() {
             <ul className="space-y-3">
               {[
                 { label: "О компании", href: "#" },
-                { label: "Проекты", href: "#" },
-                { label: "Контакты", href: "#contacts" },
+                { label: "Проекты", href: "#projects" },
               ].map((item) => (
                 <li key={item.label}>
                   <a

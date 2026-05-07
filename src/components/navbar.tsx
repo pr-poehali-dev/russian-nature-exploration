@@ -2,6 +2,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
+const navLinks = [
+  { label: "Fastnode", href: "#manufacturing" },
+  { label: "Направления", href: "#applications" },
+  { label: "Заказчики", href: "#clients" },
+  { label: "Проекты", href: "#projects" },
+]
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -18,21 +25,28 @@ export function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          <div className="hidden md:flex items-center gap-8 ml-10">
+            {navLinks.map((link) => (
               <a
-                href="#applications"
-                className="font-geist text-white hover:text-[#AAFF00] transition-colors duration-200"
+                key={link.label}
+                href={link.href}
+                className="text-white hover:text-[#AAFF00] transition-colors duration-200 text-sm"
+                style={{ fontFamily: "'Inter', sans-serif" }}
               >
-                Направления
+                {link.label}
               </a>
-
-            </div>
+            ))}
           </div>
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button className="bg-[#AAFF00] hover:bg-[#99ee00] text-black font-geist font-bold border-0">Связаться</Button>
+            <Button
+              className="bg-[#AAFF00] hover:bg-[#99ee00] text-black font-bold border-0"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+              onClick={() => document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              Связаться
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -50,16 +64,22 @@ export function Navbar() {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-black/98 border-t border-lime-400/20">
-              <a
-                href="#applications"
-                className="block px-3 py-2 font-geist text-white hover:text-[#AAFF00] transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                Направления
-              </a>
-
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="block px-3 py-2 text-white hover:text-[#AAFF00] transition-colors duration-200 text-sm"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
               <div className="px-3 py-2">
-                <Button className="w-full bg-[#AAFF00] hover:bg-[#99ee00] text-black font-geist font-bold border-0">
+                <Button
+                  className="w-full bg-[#AAFF00] hover:bg-[#99ee00] text-black font-bold border-0"
+                  onClick={() => { setIsOpen(false); document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" }) }}
+                >
                   Связаться
                 </Button>
               </div>

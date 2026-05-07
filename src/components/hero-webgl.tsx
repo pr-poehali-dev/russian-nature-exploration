@@ -259,18 +259,7 @@ export const Hero3DWebGL = () => {
         >
           custom solutions
         </div>
-        <div
-          className={`pointer-events-auto ${subtitleVisible ? "fade-in-subtitle" : ""}`}
-          style={{ opacity: subtitleVisible ? undefined : 0 }}
-        >
-          <a
-            href="#contact"
-            className="inline-block px-8 py-3 border border-[#AAFF00] text-[#AAFF00] hover:bg-[#AAFF00] hover:text-black transition-all duration-300 text-sm font-bold tracking-widest uppercase"
-            style={{ fontFamily: "'Unbounded', sans-serif" }}
-          >
-            Связаться
-          </a>
-        </div>
+
       </div>
 
       <Canvas
