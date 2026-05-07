@@ -1,5 +1,8 @@
 import { Hero3DWebGL as Hero3D } from "@/components/hero-webgl"
 import { ManufacturingSection } from "@/components/manufacturing-section"
+import { PartnerYadroSection } from "@/components/partner-yadro-section"
+import { ClientsSection } from "@/components/clients-section"
+import { ProjectsSection } from "@/components/projects-section"
 import { FeaturesSection } from "@/components/features-section"
 import { TechnologySection } from "@/components/technology-section"
 import { ApplicationsTimeline } from "@/components/applications-timeline"
@@ -18,6 +21,9 @@ export default function Index() {
       <main>
         <Hero3D />
         <ManufacturingSection />
+        <PartnerYadroSection />
+        <ClientsSection />
+        <ProjectsSection />
         <FeaturesSection />
         <section id="technology">
           <TechnologySection />
