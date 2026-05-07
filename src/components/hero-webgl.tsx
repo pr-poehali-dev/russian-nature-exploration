@@ -242,8 +242,8 @@ export const Hero3DWebGL = () => {
         </p>
       </div>
 
-      {/* Главный заголовок — внизу по центру, одна строка, строчные */}
-      <div className="h-screen w-full absolute z-[60] pointer-events-none flex items-end justify-center pb-10 px-4">
+      {/* Главный заголовок + кнопка — внизу по центру */}
+      <div className="h-screen w-full absolute z-[60] pointer-events-none flex flex-col items-center justify-end pb-8 px-4 gap-6">
         <div
           className={titleVisible ? "fade-in" : ""}
           style={{
@@ -258,6 +258,18 @@ export const Hero3DWebGL = () => {
           }}
         >
           custom solutions
+        </div>
+        <div
+          className={`pointer-events-auto ${subtitleVisible ? "fade-in-subtitle" : ""}`}
+          style={{ opacity: subtitleVisible ? undefined : 0 }}
+        >
+          <a
+            href="#contact"
+            className="inline-block px-8 py-3 border border-[#AAFF00] text-[#AAFF00] hover:bg-[#AAFF00] hover:text-black transition-all duration-300 text-sm font-bold tracking-widest uppercase"
+            style={{ fontFamily: "'Unbounded', sans-serif" }}
+          >
+            Связаться
+          </a>
         </div>
       </div>
 
