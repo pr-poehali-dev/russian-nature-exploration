@@ -6,7 +6,7 @@ const brands = [
 
 export function ManufacturingSection() {
   return (
-    <section className="bg-black py-24 px-4 border-t border-lime-400/10">
+    <section id="manufacturing" className="bg-black py-24 px-4 border-t border-lime-400/10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-16">

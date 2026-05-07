@@ -1,41 +1,41 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import Icon from "@/components/ui/icon"
 
 const features = [
   {
     title: "Гибкость и адаптивность",
     description: "Быстро реагируем на смену внешних условий, способов поставки и логистики. Ваш проект не остановится из-за внешних факторов.",
-    icon: "zap",
+    icon: "Zap",
     badge: "Скорость",
   },
   {
     title: "Новые каналы закупки",
     description: "Постоянно находим и развиваем альтернативные каналы закупки оборудования для бесперебойной работы цепочки поставок.",
-    icon: "link",
+    icon: "Link",
     badge: "Снабжение",
   },
   {
     title: "Высочайшее качество",
     description: "Неизменно соблюдаем стандарты качества поставляемого оборудования и выполняемых работ на каждом этапе.",
-    icon: "target",
+    icon: "Target",
     badge: "Стандарт",
   },
   {
     title: "Клиентоориентированность",
     description: "Каждый проект тонко настроен и адаптирован под конкретные запросы и потребности заказчика. Никаких шаблонных решений.",
-    icon: "globe",
+    icon: "Globe",
     badge: "Индивидуально",
   },
   {
     title: "Экспертиза 15+ лет",
     description: "Команда с опытом реализации крупных инфраструктурных проектов: проектирование и строительство дата-центров и суперкомпьютеров.",
-    icon: "brain",
+    icon: "Brain",
     badge: "Опыт",
   },
   {
     title: "Репутация без претензий",
     description: "За более чем 6 лет работы — ни одной пени и ни одного арбитражного дела. Качество, сроки и результат — наша гарантия.",
-    icon: "lock",
+    icon: "ShieldCheck",
     badge: "Надёжность",
   },
 ]
@@ -60,17 +60,15 @@ export function FeaturesSection() {
             >
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">
-                    {feature.icon === "brain" && "&#129504;"}
-                    {feature.icon === "lock" && "&#128274;"}
-                    {feature.icon === "globe" && "&#127760;"}
-                    {feature.icon === "zap" && "&#9889;"}
-                    {feature.icon === "link" && "&#128279;"}
-                    {feature.icon === "target" && "&#127919;"}
-                  </span>
-                  <Badge variant="secondary" className="bg-accent text-accent-foreground">
+                  <div className="w-10 h-10 rounded-lg bg-[#AAFF00]/10 flex items-center justify-center">
+                    <Icon name={feature.icon} size={20} className="text-[#AAFF00]" />
+                  </div>
+                  <span
+                    className="text-xs border border-lime-400/30 text-[#AAFF00] px-2 py-1"
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
                     {feature.badge}
-                  </Badge>
+                  </span>
                 </div>
                 <CardTitle className="text-xl font-bold text-card-foreground">{feature.title}</CardTitle>
               </CardHeader>
